@@ -14,3 +14,4 @@ Trang chạy thật (GitHub Pages) là `index.html`, `sw.js`, `manifest.webmanif
 - Văn phong: tiếng Việt tự nhiên, dễ hiểu cho người không biết chiêm tinh, không lặp ý, không viết kiểu liệt kê máy móc.
 - Kết quả phải giống hệt nhau mỗi lần xem (không dùng ngẫu nhiên/thời gian thực trong chấm điểm).
 - Giữ dòng "Người tạo: Hoàng Trung Đức" ở cuối trang.
+- Link app: https://godkinggamer.github.io/Astrofit/ (chữ A viết hoa).
