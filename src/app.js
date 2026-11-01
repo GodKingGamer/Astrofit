@@ -38,8 +38,10 @@ const TRAD=["Mars","Venus","Mercury","Moon","Sun","Mercury","Venus","Mars","Jupi
 function dignity(k,s){if(DOMI[k]&&DOMI[k].includes(s))return{lab:"đang ở vị trí mạnh nhất",v:2};if(EXAL[k]===s)return{lab:"phát huy rất tốt",v:1.6};if(DOMI[k]&&DOMI[k].some(x=>(x+6)%12===s))return{lab:"khó phát huy",v:-1.5};if(EXAL[k]!=null&&(EXAL[k]+6)%12===s)return{lab:"hơi lệch, cần cố gắng hơn",v:-1.4};return{lab:"",v:0}}
 
 // ---------- chart building ----------
+const TODAY=(()=>{const d=new Date(),z=x=>String(x).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())})();
+const dateNote=v=>{if(!v)return"";if(v>TODAY)return"Ngày sinh đang ở tương lai, bạn kiểm tra lại năm sinh nhé.";const [y,m]=v.split("-").map(Number),[ty,tm]=TODAY.split("-").map(Number);const mo=(ty-y)*12+(tm-m);return mo<36?("Người này mới "+(mo<12?Math.max(mo,0)+" tháng":Math.floor(mo/12)+" tuổi")+". Nếu nhập nhầm năm sinh, bạn sửa lại nhé."):""};
 function build(p){
-  if(!p||!p.date)return null;if(!p.unknown&&!String(p.time||"").trim())p={...p,unknown:true,time:"12:00"};const [y,m,d]=p.date.split("-").map(Number);if(!y||!m||!d)return null;
+  if(!p||!p.date||p.date>TODAY||p.date<"1900-01-01")return null;if(!p.unknown&&!String(p.time||"").trim())p={...p,unknown:true,time:"12:00"};const [y,m,d]=p.date.split("-").map(Number);if(!y||!m||!d)return null;
   let hh=12,mm=0;if(!p.unknown&&p.time){[hh,mm]=p.time.split(":").map(Number)}
   let lat=null,lon=null;if(p.city==="other"){lat=parseFloat(p.lat);lon=parseFloat(p.lon);if(!isFinite(lat)||!isFinite(lon)){lat=null;lon=null}}else if(CITIES[p.city]){lat=CITIES[p.city][1];lon=CITIES[p.city][2]}
   const tz=Number(p.tz)||0;
@@ -559,7 +561,7 @@ function renderTransits(){const ch=CHM[state.trView];if(!ch){$("trSub").textCont
     return `<div class="titem ${kk==="hard"?"hard":kk==="conj"?"conj":""}"><span><b>${E(TRN[x.p])} ${x.ang===0?"đi qua":kind(x.ang)==="soft"?"nâng đỡ":"thử thách"} ${E(nml(x.k))}</b></span><span class="w">${fd(x.from)} – ${fd(x.to)}</span><span class="m">${E((TR[x.p][kk]||"")+" "+NATPT[x.k])}.${E(ret)} Chính xác nhất khoảng ${fd(x.exact)}.</span></div>`}).join("")}
 function renderForms(){const f=(p,idx)=>{const k=p.id,isC=k===state.center;return `<div class="panel" data-card="${k}"><div class="formhead"><h3>Người ${idx+1}${isC?' <span class="pill">người so sánh chính</span>':""}</h3><div class="btns">${isC?"":`<button type="button" class="btn" data-center="${k}">Đặt làm người chính</button>`}${state.people.length>2?`<button type="button" class="btn" data-del="${k}">Xóa</button>`:""}</div></div><div class="fields">
   <div class="field wide"><label for="name-${k}">Họ và tên</label><input id="name-${k}" data-k="${k}" data-f="name" type="text" maxlength="80" value="${E(p.name)}"></div>
-  <div class="field"><label for="date-${k}">Ngày sinh</label><input id="date-${k}" data-k="${k}" data-f="date" type="date" value="${E(p.date)}"></div>
+  <div class="field"><label for="date-${k}">Ngày sinh</label><input id="date-${k}" data-k="${k}" data-f="date" type="date" min="1900-01-01" max="${TODAY}" value="${E(p.date)}"><div class="fine" id="dw-${k}" style="color:var(--b);margin-top:4px"${dateNote(p.date)?"":" hidden"}>${E(dateNote(p.date))}</div></div>
   <div class="field"><label for="time-${k}">Giờ sinh (24h)</label><input id="time-${k}" data-k="${k}" data-f="time" type="time" value="${E(p.time)}" ${p.unknown?"disabled":""}></div>
   <div class="field wide"><label class="check"><input id="unk-${k}" data-k="${k}" data-f="unknown" type="checkbox" ${p.unknown?"checked":""}> Không rõ giờ sinh</label></div>
   <div class="field ${p.unknown?"":"hidden"}" data-simf="${k}"><label for="win-${k}">Khoảng giờ có thể sinh</label><select id="win-${k}" data-k="${k}" data-f="simWin">${Object.entries(SIMWIN).map(([w,v])=>`<option value="${w}" ${(p.simWin||"all")===w?"selected":""}>${E(v[0])}</option>`).join("")}</select></div>
@@ -596,7 +598,7 @@ function init(){
     else if(t.dataset.person){if(t.closest("#van-han")){state.trView=t.dataset.person;personSeg();renderTransits()}else{state.view=t.dataset.person;state.natSel="Sun";personSeg();renderNatal()}}});
   $("forms").addEventListener("change",e=>{const t=e.target,k=t.dataset.k,f=t.dataset.f;if(!k)return;const p=byId(k);if(!p)return;
     if(f==="unknown"){p.unknown=t.checked;$("time-"+k).disabled=t.checked;document.querySelectorAll(`[data-simf="${k}"]`).forEach(x=>x.classList.toggle("hidden",!t.checked));document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",!(t.checked&&p.simWin==="custom")))}
-    else if(f==="simWin"){p.simWin=t.value;document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",t.value!=="custom"))}else if(f==="tz")p.tz=Number(t.value);else p[f]=t.value;
+    else if(f==="simWin"){p.simWin=t.value;document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",t.value!=="custom"))}else if(f==="tz")p.tz=Number(t.value);else p[f]=t.value;if(f==="date"){const w=document.getElementById("dw-"+k);if(w){const m=dateNote(t.value);w.textContent=m;w.hidden=!m}}
     if(f==="city"){const show=t.value==="other";$("lat-"+k).closest(".field").classList.toggle("hidden",!show);$("lon-"+k).closest(".field").classList.toggle("hidden",!show)}
     save();renderAll()});
   $("btnReset").addEventListener("click",()=>{state.people=JSON.parse(JSON.stringify(BLANK.people));state.center=BLANK.center;state.pairA=BLANK.pairA;state.view="p1";state.trView="p1";try{localStorage.removeItem("astrofit-v1");localStorage.removeItem("astrofit-v2")}catch(e){}renderForms();renderAll()});
