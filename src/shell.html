@@ -190,7 +190,7 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 <header class="top">
   <div class="topbar">
     <div><div class="brand">AstroFit <b>Studio</b> <span class="pill">2026 · Bản đồ sao</span></div><div class="subtitle">Tính chính xác ngay trong trình duyệt · Giải thích bằng ngôn ngữ đời thường</div></div>
-    <div class="btns"><button class="btn" id="btnCopy" type="button">Sao chép tóm tắt</button><button class="btn" id="btnReset" type="button">Khôi phục mẫu</button></div>
+    <div class="btns"><button class="btn" id="btnCopy" type="button">Sao chép tóm tắt</button><button class="btn" id="btnReset" type="button">Xóa hết, nhập lại</button></div>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="ca-nhan" aria-selected="true" type="button">01 · Bản đồ cá nhân</button>
@@ -264,13 +264,13 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 </section>
 
 <section class="page" id="nhap">
-  <div class="intro"><div><div class="kicker">Hồ sơ</div><h1>Nhập thông tin</h1><div class="sub">Kết quả cập nhật ngay khi bạn thay đổi. Dữ liệu chỉ lưu trong trình duyệt của bạn.</div></div>
+  <div class="intro"><div><div class="kicker">Profile · Input</div><h1>Nhập thông tin</h1><div class="sub">Kết quả cập nhật ngay khi bạn thay đổi. Dữ liệu chỉ lưu trong trình duyệt của bạn.</div></div>
     <div class="btns"><button class="btn primary" type="button" data-go="ca-nhan">Xem bản đồ →</button></div></div>
   <div class="panel aibox">
     <div class="formhead"><h3>Trợ lý nhập liệu</h3><span class="pill" id="aiMode">Bộ đọc câu trong máy</span></div>
     <p class="fine" style="margin-top:4px">Gõ một câu như đang nhắn tin: tên, ngày sinh, giờ sinh, nơi sinh của từng người, và người được so sánh đứng sau chữ "với". Bấm Phân tích, kiểm tra bảng, rồi Áp dụng.</p>
     <label class="hidden" for="aiText">Câu mô tả</label>
-    <textarea id="aiText" rows="3" placeholder="Ví dụ: So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Minh (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Thảo (11/6/2002 5h30, Hà Nội)"></textarea>
+    <textarea id="aiText" rows="3" placeholder="Ví dụ: So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Quân (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Ngọc (14/9/2001 6h15, Hà Nội)"></textarea>
     <div class="addrow" style="margin-top:10px"><button class="btn primary" type="button" id="aiParse">Phân tích</button><button class="btn" type="button" id="aiExample">Điền câu ví dụ</button><label class="check"><input type="checkbox" id="aiReplace" checked> Thay danh sách hiện tại</label><span class="fine" id="aiStatus" aria-live="polite"></span></div>
     <div id="aiPreview" style="margin-top:12px"></div>
   </div>
@@ -297,7 +297,7 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
       <li>Luận giải được ghép từ thư viện diễn giải theo vị trí và góc chiếu; một người luận giải thực thụ sẽ cân nhắc tổng thể tinh tế hơn.</li>
       <li>Không dùng kết quả để quyết định sức khỏe, tài chính, pháp lý hay chấm dứt một mối quan hệ.</li>
       <li>Miền Nam Việt Nam dùng UTC+8 trong giai đoạn 1959–1975; hãy chọn đúng múi giờ khi nhập.</li></ul></div>
-    <div class="panel"><h3>Quyền riêng tư</h3><p style="margin-top:8px">Thông tin sinh chỉ được tính và lưu trong trình duyệt của bạn (bộ nhớ cục bộ). Trang không gửi dữ liệu đi đâu. Bấm "Khôi phục mẫu" để xóa và quay về dữ liệu ví dụ.</p></div>
+    <div class="panel"><h3>Quyền riêng tư</h3><p style="margin-top:8px">Thông tin sinh chỉ được tính và lưu trong trình duyệt của bạn (bộ nhớ cục bộ). Trang không gửi dữ liệu đi đâu. Bấm "Xóa hết, nhập lại" để xóa toàn bộ thông tin đã lưu.</p></div>
   </div>
 </section>
 

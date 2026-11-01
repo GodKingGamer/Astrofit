@@ -1,5 +1,5 @@
 const {JSDOM}=require('jsdom');const fs=require('fs');
-const dom=new JSDOM(fs.readFileSync(process.argv[2],'utf8'),{runScripts:'dangerously',pretendToBeVisual:true,url:'https://x.test/'});
+const dom=new JSDOM(fs.readFileSync(process.argv[2],'utf8'),{runScripts:'dangerously',pretendToBeVisual:true,url:'https://x.test/#demo'});
 const w=dom.window,d=w.document;const errs=[];w.addEventListener('error',e=>errs.push(e.message));
 const fire=(id,v)=>{const el=d.getElementById(id);if(el.type==='checkbox')el.checked=v;else el.value=v;el.dispatchEvent(new w.Event('change',{bubbles:true}))};
 setTimeout(()=>{const AF=w.__AF;

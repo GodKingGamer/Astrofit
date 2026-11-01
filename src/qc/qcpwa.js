@@ -1,6 +1,6 @@
 const {chromium,devices}=require('playwright');
 (async()=>{const b=await chromium.launch();const ctx=await b.newContext({...devices['Pixel 7']});const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
-await p.goto('http://localhost:8765/',{waitUntil:'networkidle'});await p.waitForFunction(()=>navigator.serviceWorker.controller||navigator.serviceWorker.ready,null,{timeout:10000});await p.waitForTimeout(1500);
+await p.goto('http://localhost:'+(process.argv[2]||'8765')+'/#demo',{waitUntil:'networkidle'});await p.waitForFunction(()=>navigator.serviceWorker.controller||navigator.serviceWorker.ready,null,{timeout:10000});await p.waitForTimeout(1500);
 const cdp=await ctx.newCDPSession(p);const inst=await cdp.send('Page.getInstallabilityErrors');const man=await cdp.send('Page.getAppManifest');
 console.log('installability errors:',JSON.stringify(inst.installabilityErrors),'| manifest errors:',JSON.stringify(man.errors));
 const sw=await p.evaluate(async()=>{const r=await navigator.serviceWorker.getRegistration();return r&&r.active&&r.active.state});console.log('SW:',sw);

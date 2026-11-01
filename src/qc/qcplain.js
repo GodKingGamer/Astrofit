@@ -1,5 +1,5 @@
 const {JSDOM}=require('jsdom');const fs=require('fs');
-const dom=new JSDOM(fs.readFileSync(process.argv[2],'utf8'),{runScripts:'dangerously',pretendToBeVisual:true,url:'https://x.test/'});
+const dom=new JSDOM(fs.readFileSync(process.argv[2],'utf8'),{runScripts:'dangerously',pretendToBeVisual:true,url:'https://x.test/#demo'});
 const w=dom.window,d=w.document;const errs=[];w.addEventListener('error',e=>errs.push(e.message));
 setTimeout(()=>{
  const grab=()=>{let t='';for(const id of ['natSub','natMetrics','natScores','natList','natDetail','natReading','natAspTable','grpBody','synMetrics','synScores','synList','synDetail','synReading','synWarn'])t+=' '+d.getElementById(id).textContent;return t};

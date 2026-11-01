@@ -192,7 +192,7 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 <header class="top">
   <div class="topbar">
     <div><div class="brand">AstroFit <b>Studio</b> <span class="pill">2026 · Bản đồ sao</span></div><div class="subtitle">Tính chính xác ngay trong trình duyệt · Giải thích bằng ngôn ngữ đời thường</div></div>
-    <div class="btns"><button class="btn" id="btnCopy" type="button">Sao chép tóm tắt</button><button class="btn" id="btnReset" type="button">Khôi phục mẫu</button></div>
+    <div class="btns"><button class="btn" id="btnCopy" type="button">Sao chép tóm tắt</button><button class="btn" id="btnReset" type="button">Xóa hết, nhập lại</button></div>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="ca-nhan" aria-selected="true" type="button">01 · Bản đồ cá nhân</button>
@@ -266,13 +266,13 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 </section>
 
 <section class="page" id="nhap">
-  <div class="intro"><div><div class="kicker">Hồ sơ</div><h1>Nhập thông tin</h1><div class="sub">Kết quả cập nhật ngay khi bạn thay đổi. Dữ liệu chỉ lưu trong trình duyệt của bạn.</div></div>
+  <div class="intro"><div><div class="kicker">Profile · Input</div><h1>Nhập thông tin</h1><div class="sub">Kết quả cập nhật ngay khi bạn thay đổi. Dữ liệu chỉ lưu trong trình duyệt của bạn.</div></div>
     <div class="btns"><button class="btn primary" type="button" data-go="ca-nhan">Xem bản đồ →</button></div></div>
   <div class="panel aibox">
     <div class="formhead"><h3>Trợ lý nhập liệu</h3><span class="pill" id="aiMode">Bộ đọc câu trong máy</span></div>
     <p class="fine" style="margin-top:4px">Gõ một câu như đang nhắn tin: tên, ngày sinh, giờ sinh, nơi sinh của từng người, và người được so sánh đứng sau chữ "với". Bấm Phân tích, kiểm tra bảng, rồi Áp dụng.</p>
     <label class="hidden" for="aiText">Câu mô tả</label>
-    <textarea id="aiText" rows="3" placeholder="Ví dụ: So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Minh (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Thảo (11/6/2002 5h30, Hà Nội)"></textarea>
+    <textarea id="aiText" rows="3" placeholder="Ví dụ: So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Quân (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Ngọc (14/9/2001 6h15, Hà Nội)"></textarea>
     <div class="addrow" style="margin-top:10px"><button class="btn primary" type="button" id="aiParse">Phân tích</button><button class="btn" type="button" id="aiExample">Điền câu ví dụ</button><label class="check"><input type="checkbox" id="aiReplace" checked> Thay danh sách hiện tại</label><span class="fine" id="aiStatus" aria-live="polite"></span></div>
     <div id="aiPreview" style="margin-top:12px"></div>
   </div>
@@ -299,7 +299,7 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
       <li>Luận giải được ghép từ thư viện diễn giải theo vị trí và góc chiếu; một người luận giải thực thụ sẽ cân nhắc tổng thể tinh tế hơn.</li>
       <li>Không dùng kết quả để quyết định sức khỏe, tài chính, pháp lý hay chấm dứt một mối quan hệ.</li>
       <li>Miền Nam Việt Nam dùng UTC+8 trong giai đoạn 1959–1975; hãy chọn đúng múi giờ khi nhập.</li></ul></div>
-    <div class="panel"><h3>Quyền riêng tư</h3><p style="margin-top:8px">Thông tin sinh chỉ được tính và lưu trong trình duyệt của bạn (bộ nhớ cục bộ). Trang không gửi dữ liệu đi đâu. Bấm "Khôi phục mẫu" để xóa và quay về dữ liệu ví dụ.</p></div>
+    <div class="panel"><h3>Quyền riêng tư</h3><p style="margin-top:8px">Thông tin sinh chỉ được tính và lưu trong trình duyệt của bạn (bộ nhớ cục bộ). Trang không gửi dữ liệu đi đâu. Bấm "Xóa hết, nhập lại" để xóa toàn bộ thông tin đã lưu.</p></div>
   </div>
 </section>
 
@@ -1048,8 +1048,10 @@ dongHoi:["Đồng Hới (Quảng Bình)",17.4689,106.6223],vinh:["Vinh (Nghệ A
 seoul:["Seoul",37.5665,126.978],tokyo:["Tokyo",35.6762,139.6503],bangkok:["Bangkok",13.7563,100.5018],singapore:["Singapore",1.3521,103.8198],sydney:["Sydney",-33.8688,151.2093],london:["London",51.5072,-0.1276],paris:["Paris",48.8566,2.3522],newyork:["New York",40.7128,-74.006],other:["Nhập tọa độ khác",null,null]};
 const MAXP=8;
 const SAMPLE={people:[{id:"p1",name:"Hoàng Trung Đức",date:"2002-08-08",time:"08:00",unknown:false,city:"hanoi",lat:"",lon:"",tz:7},{id:"p2",name:"Nguyễn Phương Thảo",date:"2002-06-11",time:"05:30",unknown:false,city:"hanoi",lat:"",lon:"",tz:7},{id:"p3",name:"Nguyễn Ngọc Minh Trang",date:"2004-01-19",time:"04:00",unknown:false,city:"dongHoi",lat:"",lon:"",tz:7},{id:"p4",name:"Trần Minh",date:"2002-09-30",time:"17:20",unknown:false,city:"hanoi",lat:"",lon:"",tz:7}],center:"p2",pairA:"p1"};
-let state={people:JSON.parse(JSON.stringify(SAMPLE.people)),center:SAMPLE.center,pairA:SAMPLE.pairA,view:"p1",trView:"p1",natSel:"Sun",synSel:0,natAsp:"all",synF:"all"};
-try{const s=JSON.parse(localStorage.getItem("astrofit-v2")||"null");if(s&&Array.isArray(s.people)&&s.people.length>=2){state.people=s.people;state.center=s.center;state.pairA=s.pairA}
+const BLANK={people:[{id:"p1",name:"",date:"",time:"",unknown:false,city:"hanoi",lat:"",lon:"",tz:7},{id:"p2",name:"",date:"",time:"",unknown:false,city:"hanoi",lat:"",lon:"",tz:7}],center:"p2",pairA:"p1"};
+const START=(typeof location!=="undefined"&&location.hash==="#demo")?SAMPLE:BLANK;
+let state={people:JSON.parse(JSON.stringify(START.people)),center:START.center,pairA:START.pairA,view:"p1",trView:"p1",natSel:"Sun",synSel:0,natAsp:"all",synF:"all"};
+if(START===BLANK)try{const s=JSON.parse(localStorage.getItem("astrofit-v2")||"null");if(s&&Array.isArray(s.people)&&s.people.length>=2){state.people=s.people;state.center=s.center;state.pairA=s.pairA}
   else{const o=JSON.parse(localStorage.getItem("astrofit-v1")||"null");if(o&&o.people&&o.people.A&&o.people.B){state.people=[{id:"p1",...o.people.A},{id:"p2",...o.people.B}];state.center="p2";state.pairA="p1"}}}catch(e){}
 const save=()=>{try{localStorage.setItem("astrofit-v2",JSON.stringify({people:state.people,center:state.center,pairA:state.pairA}))}catch(e){}};
 const byId=id=>state.people.find(p=>p.id===id);
@@ -1077,7 +1079,7 @@ function build(p){
   for(const k of ORDER){let lonv=null,retro=false;if(k==="ASC"){if(!H)continue;lonv=H.asc}else if(k==="MC"){if(!H)continue;lonv=H.mc}else{if(!c.P[k])continue;lonv=c.P[k].lon;retro=c.P[k].retro}
     pts[k]={k,lon:lonv,retro,s:sIdx(lonv),h:H?houseOf(lonv,H.cusps):null}}
   let moonRange=null;if(p.unknown){const a=ENG.chart(Astronomy,{y,m,d,hh:0,mm:0,tz,lat:null,lon:null},null).P.Moon.lon,b=ENG.chart(Astronomy,{y,m,d,hh:23,mm:59,tz,lat:null,lon:null},null).P.Moon.lon;moonRange=[a,b]}
-  const ch={p,name:p.name,short:short(p.name),pts,H,moonRange,date:c.date};
+  const nmF=String(p.name||"").trim()||("Người "+((state.people.findIndex(x=>x.id===p.id)+1)||""));const ch={p,name:p.name,short:String(p.name||"").trim()?short(p.name):nmF.trim(),pts,H,moonRange,date:c.date};
   ch.asp=aspectsWithin(ch);ch.el=elements(ch);ch.num=numerology(p.name,p.date);ch.patterns=patterns(ch);
   for(const k in pts)pts[k].power=pointPower(ch,k);
   ch.radar=natalRadar(ch);return ch}
@@ -1400,7 +1402,7 @@ function parseLocal(text){const src=String(text||"").trim();const res={people:[]
   const ci=res.people.findIndex(p=>p.isCenter);res.center=ci>=0?ci:null;
   if(!res.people.length)res.issues.push("Chưa nhận ra người nào. Hãy ghi theo dạng: Tên (ngày/tháng/năm giờ, nơi sinh).");
   return res}
-const AI_EXAMPLE="So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Minh (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Thảo (11/6/2002 5h30, Hà Nội)";
+const AI_EXAMPLE="So sánh Lan (12/3/1999 7h30 sáng, Hà Nội), Quân (2/11/1998 9h tối, Đà Nẵng) và Hùng (5/5/2000, không rõ giờ, Huế) với Ngọc (14/9/2001 6h15, Hà Nội)";
 let SAMPLE_FN=null;
 (async()=>{try{if(window.claude&&typeof window.claude.use==="function"){SAMPLE_FN=await window.claude.use("sample");}}catch(e){SAMPLE_FN=null}aiModeLabel()})();
 function aiModeLabel(){const el=document.getElementById("aiMode");if(el)el.textContent=SAMPLE_FN?"Bộ đọc câu + Claude (tài khoản của bạn)":"Bộ đọc câu trong máy"}
@@ -1544,7 +1546,7 @@ function synReading(){const A=CH.A,B=CH.B,R=SY.radar,out=[],toc=[];const add=(id
   const li=x=>{const t=synText(x,A,B);return `<li><b>${E(OWN(x.a,A.short))} ${E(AG(x.ang))} ${E(OWNl(x.b,B.short))}</b> <span class="muted">(mức ${E(STR(x.orb))})</span>: ${E(t.main)}${t.ex?`<div class="ex" style="margin-top:6px"><span class="exl">Ví dụ</span>${E(t.ex)}</div>`:""}</li>`};
   const intro=["Mảng này xem hai người chạm vào thế giới cảm xúc của nhau thế nào: có thấy an toàn, được thấu hiểu không.","Mảng này xem sức hút giữa hai người: cách yêu, sự chủ động và độ cuốn hút.","Mảng này xem hai người nói chuyện, hiểu ý nhau dễ hay khó.","Mảng này đo độ êm khi có mâu thuẫn: nóng nảy, áp lực, kiểm soát hay thay đổi bất ngờ.","Mảng này xem nền móng cho chuyện lâu dài: trách nhiệm, sự chung thủy, cảm giác gia đình.","Mảng này xem hai người có giúp nhau lớn lên, mở rộng cơ hội và đi đúng hướng không."];
   const ids=["syn-cam-xuc","syn-lang-man","syn-giao-tiep","syn-xung-dot","syn-cam-ket","syn-phat-trien"];
-  const USED=new Set(),OVU=new Set();const keepCap=s=>{const w=s.split(/\s/)[0].replace(/[^\p{L}]/gu,"");return w===A.short||w===B.short?s:lf(s)};
+  const USED=new Set(),OVU=new Set();const keepCap=s=>s.startsWith(A.short)||s.startsWith(B.short)?s:lf(s);
   const OVP={7:"mang dáng dấp của một người bạn đời",5:"đem lại cảm giác của một mối tình lãng mạn",4:"gần gũi như người nhà",11:"giống một người bạn, một đồng đội",10:"là người giúp mình tiến xa hơn trong công việc",1:"cuốn hút ngay từ cái nhìn đầu tiên",3:"là người để trò chuyện mỗi ngày",9:"giúp mở rộng tầm nhìn và thế giới của mình",12:"là một mối duyên khó gọi thành tên",8:"tạo nên một sự gắn kết sâu và mãnh liệt",2:"đem lại cảm giác an toàn, vững vàng",6:"là người cùng chăm lo cuộc sống hằng ngày"};
   const ovSentence=list=>{const seen=new Set(),s=[];for(const o of list){if(!["Sun","Moon","Venus","Mars"].includes(o.k))continue;const key=o.owner.short+o.host.short+o.h;if(seen.has(key)||OVU.has(key))continue;seen.add(key);if(s.length<2){OVU.add(key);s.push((s.length?"Còn với ":"Với ")+o.host.short+", "+o.owner.short+" "+OVP[o.h]+".")}}return s.join(" ")};
   R.forEach((r,i)=>{const items=topFor(i);let b=`<p class="muted">${E(intro[i])}</p>`;
@@ -1612,7 +1614,7 @@ function init(){
   fixRefs();renderAll();renderForms();
   document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{tab(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
   document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{tab(b.dataset.go);window.scrollTo({top:0})}));
-  window.addEventListener("hashchange",route);route();
+  window.addEventListener("hashchange",route);route();if(!Object.values(CHM).some(Boolean)&&!/^#(ca-nhan|hop-doi|van-han|phuong-phap)$/.test(location.hash))tab("nhap");
   document.addEventListener("click",e=>{const ab=e.target.closest("[data-asc][data-pid]");if(ab){const p=byId(ab.dataset.pid);if(p){p.ascKnown=ab.dataset.asc==="-1"?"":ab.dataset.asc;save();renderAll();renderForms()}return}
     const t=e.target.closest("[data-nat],[data-syn],[data-natasp],[data-synf],[data-pair],[data-del],[data-center],.seg button[data-person]");if(!t)return;
     if(t.dataset.pair){state.pairA=t.dataset.pair;state.synSel=0;save();calc();renderSyn();const d=document.getElementById("synTitle");if(d&&typeof d.scrollIntoView==="function")d.scrollIntoView({block:"start",behavior:"smooth"});return}
@@ -1628,20 +1630,20 @@ function init(){
     else if(f==="simWin"){p.simWin=t.value;document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",t.value!=="custom"))}else if(f==="tz")p.tz=Number(t.value);else p[f]=t.value;
     if(f==="city"){const show=t.value==="other";$("lat-"+k).closest(".field").classList.toggle("hidden",!show);$("lon-"+k).closest(".field").classList.toggle("hidden",!show)}
     save();renderAll()});
-  $("btnReset").addEventListener("click",()=>{state.people=JSON.parse(JSON.stringify(SAMPLE.people));state.center=SAMPLE.center;state.pairA=SAMPLE.pairA;state.view="p1";state.trView="p1";try{localStorage.removeItem("astrofit-v1");localStorage.removeItem("astrofit-v2")}catch(e){}renderForms();renderAll()});
+  $("btnReset").addEventListener("click",()=>{state.people=JSON.parse(JSON.stringify(BLANK.people));state.center=BLANK.center;state.pairA=BLANK.pairA;state.view="p1";state.trView="p1";try{localStorage.removeItem("astrofit-v1");localStorage.removeItem("astrofit-v2")}catch(e){}renderForms();renderAll()});
   $("aiParse").addEventListener("click",runAi);
   $("aiExample").addEventListener("click",()=>{$("aiText").value=AI_EXAMPLE;$("aiText").focus()});
   $("aiText").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();runAi()}});
   document.addEventListener("click",e=>{if(e.target.closest("#aiApply"))applyAi();else if(e.target.closest("#aiCancel")){AI_RES=null;renderAiPreview();$("aiStatus").textContent=""}});
   aiModeLabel();
-  $("btnAdd").addEventListener("click",()=>{if(state.people.length>=MAXP)return;let n=1;while(byId("p"+n))n++;const id="p"+n;state.people.push({id,name:"Người mới "+n,date:"2000-01-01",time:"12:00",unknown:false,city:"hanoi",lat:"",lon:"",tz:7});save();renderAll();renderForms();const inp=$("name-"+id);if(inp){inp.focus();inp.select()}});
+  $("btnAdd").addEventListener("click",()=>{if(state.people.length>=MAXP)return;let n=1;while(byId("p"+n))n++;const id="p"+n;state.people.push({id,name:"",date:"",time:"",unknown:false,city:"hanoi",lat:"",lon:"",tz:7});save();renderAll();renderForms();const inp=$("name-"+id);if(inp){inp.focus();inp.select()}});
   $("btnCopy").addEventListener("click",async()=>{const txt=summary();try{await navigator.clipboard.writeText(txt);$("btnCopy").textContent="Đã sao chép"}catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");$("btnCopy").textContent="Đã sao chép"}catch(e2){$("btnCopy").textContent="Không sao chép được"}ta.remove()}setTimeout(()=>{$("btnCopy").textContent="Sao chép tóm tắt"},1800)});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 window.__AF={simPair,simSamples,natSimSummary,parseLocal,findPlace,applyAi:()=>applyAi(),setAiRes:r=>{AI_RES=r},state,CH:()=>CH,CHM:()=>CHM,GROUP:()=>GROUP,SY:()=>SY,synastry,build};
 })();
 </script>
-<div id="pwaBar" style="text-align:center;font-size:12px;opacity:.65;padding:18px 0 4px">AstroFit Studio · Bản 11 · 01/11/2026<button id="pwaInstall" hidden style="margin-left:10px;font:inherit;padding:4px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer">Cài app</button></div>
+<div id="pwaBar" style="text-align:center;font-size:12px;opacity:.65;padding:18px 0 4px">AstroFit Studio · Bản 12 · 01/11/2026<button id="pwaInstall" hidden style="margin-left:10px;font:inherit;padding:4px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer">Cài app</button></div>
 <div id="pwaToast" hidden style="position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1A1C3A;color:#ECEAF7;border:1px solid #33365C;border-radius:12px;padding:10px 14px;font-size:13px;z-index:99;box-shadow:0 6px 24px rgba(0,0,0,.3)">Đã có bản mới. <button id="pwaReload" style="font:inherit;margin-left:6px;padding:3px 10px;border-radius:8px;border:0;background:#E0B867;color:#11122A;cursor:pointer">Tải lại</button></div>
 <script>(function(){if(!("serviceWorker" in navigator))return;let dp=null;const b=document.getElementById("pwaInstall");
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;b.hidden=false});b.onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;b.hidden=true};
