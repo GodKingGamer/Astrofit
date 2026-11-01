@@ -1,0 +1,12 @@
+const {chromium,devices}=require('playwright');
+(async()=>{const b=await chromium.launch();const ctx=await b.newContext({...devices['Pixel 7']});const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('http://localhost:8765/',{waitUntil:'networkidle'});await p.waitForFunction(()=>navigator.serviceWorker.controller||navigator.serviceWorker.ready,null,{timeout:10000});await p.waitForTimeout(1500);
+const cdp=await ctx.newCDPSession(p);const inst=await cdp.send('Page.getInstallabilityErrors');const man=await cdp.send('Page.getAppManifest');
+console.log('installability errors:',JSON.stringify(inst.installabilityErrors),'| manifest errors:',JSON.stringify(man.errors));
+const sw=await p.evaluate(async()=>{const r=await navigator.serviceWorker.getRegistration();return r&&r.active&&r.active.state});console.log('SW:',sw);
+const s1=await p.evaluate(()=>{const A=window.__AF;const P=A.state.people;return document.getElementById('synMetrics').textContent.slice(0,80)});
+console.log('creator:',await p.evaluate(()=>document.querySelector('.creator').textContent));
+await p.reload();await p.waitForTimeout(800);await ctx.setOffline(true);await p.reload({waitUntil:'domcontentloaded'});await p.waitForTimeout(1500);
+const s2=await p.evaluate(()=>document.getElementById('synMetrics').textContent.slice(0,80));console.log('offline works:',s1===s2&&s2.length>10, s2);
+await p.screenshot({path:'pwa_phone.png',fullPage:false});
+const w=await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth);console.log('horizontal overflow:',w,'errs',errs);await b.close()})();
