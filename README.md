@@ -2,6 +2,6 @@
 
 Ứng dụng bản đồ sao dạng PWA. Mở link trên điện thoại rồi chọn "Thêm vào màn hình chính".
 
-Phiên bản: Bản 12 · 01/11/2026
+Phiên bản: Bản 13 · 01/11/2026
 
 Người tạo: Hoàng Trung Đức

@@ -39,7 +39,7 @@ function dignity(k,s){if(DOMI[k]&&DOMI[k].includes(s))return{lab:"đang ở vị
 
 // ---------- chart building ----------
 function build(p){
-  if(!p||!p.date)return null;const [y,m,d]=p.date.split("-").map(Number);if(!y||!m||!d)return null;
+  if(!p||!p.date)return null;if(!p.unknown&&!String(p.time||"").trim())p={...p,unknown:true,time:"12:00"};const [y,m,d]=p.date.split("-").map(Number);if(!y||!m||!d)return null;
   let hh=12,mm=0;if(!p.unknown&&p.time){[hh,mm]=p.time.split(":").map(Number)}
   let lat=null,lon=null;if(p.city==="other"){lat=parseFloat(p.lat);lon=parseFloat(p.lon);if(!isFinite(lat)||!isFinite(lon)){lat=null;lon=null}}else if(CITIES[p.city]){lat=CITIES[p.city][1];lon=CITIES[p.city][2]}
   const tz=Number(p.tz)||0;
@@ -457,7 +457,7 @@ function renderNatSim(ch){const box=$("natSim");const S=ch?natSimSummary(ch):nul
 // ---------- render ----------
 let CH={A:null,B:null};
 let CHM={},GROUP=[];
-function calc(){fixRefs();CHM={};for(const p of state.people){const c=build(p);CHM[p.id]=c;if(c&&p.unknown){const S=natSimSummary(c);if(S&&!S.empty)c.radar.forEach((r,i)=>{r[1]=S.radar[i].v;r.pct=S.radar[i].pct;r.range=[S.radar[i].lo,S.radar[i].hi]})}}CH.A=CHM[state.pairA];CH.B=CHM[state.center];
+function calc(){fixRefs();CHM={};for(const p of state.people){const c=build(p);CHM[p.id]=c;if(c&&c.p.unknown){const S=natSimSummary(c);if(S&&!S.empty)c.radar.forEach((r,i)=>{r[1]=S.radar[i].v;r.pct=S.radar[i].pct;r.range=[S.radar[i].lo,S.radar[i].hi]})}}CH.A=CHM[state.pairA];CH.B=CHM[state.center];
   GROUP=state.people.filter(p=>p.id!==state.center&&CHM[p.id]&&CHM[state.center]).map(p=>({id:p.id,ch:CHM[p.id],S:applySim(synastry(CHM[p.id],CHM[state.center]),simPair(CHM[p.id],CHM[state.center]))})).sort((a,b)=>b.S.total-a.S.total||a.ch.p.name.localeCompare(b.ch.p.name,"vi"))}
 function personSeg(){const mk=(sel,cur)=>state.people.map(p=>`<button type="button" data-person="${p.id}" aria-pressed="${p.id===cur}">${E(CHM[p.id]?CHM[p.id].short:short(p.name))}</button>`).join("");
   $("segNat").innerHTML=mk("nat",state.view);$("segTr").innerHTML=mk("tr",state.trView)}
