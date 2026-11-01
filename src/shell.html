@@ -182,6 +182,9 @@ table.grp th,table.grp td{white-space:nowrap}
 table.grp td:nth-child(2){white-space:normal;min-width:160px}
 table.grp tr.sel td{background:var(--accent-soft)}
 table.grp .btn{padding:4px 10px;font-size:.78rem}
+table.grp tbody tr{cursor:pointer}table.grp tbody tr:hover td{background:var(--soft)}table.grp tbody tr.sel td{background:var(--accent-soft)}
+table.grp .hint{font-size:.78rem;color:var(--accent);margin-top:2px;font-weight:600}
+button.lg{font:inherit;background:none;border:1px solid transparent;border-radius:999px;padding:2px 8px;color:inherit;cursor:pointer}button.lg.on{border-color:var(--accent);background:var(--accent-soft)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 </style>
@@ -233,7 +236,7 @@ footer{font-size:.78rem;color:var(--muted);margin-top:28px;max-width:80ch}
 
 <section class="page" id="hop-doi">
   <div class="intro"><div><div class="kicker">Synastry · Group & couple report</div><h1 id="synTitle">Hợp đôi</h1><div class="sub" id="synSub"></div></div><div class="btns"><button class="btn" type="button" data-go="nhap">Nhập nhanh bằng câu lệnh</button></div></div>
-  <div class="panel"><div class="boardTools" style="padding:0 0 12px;border:0"><h3 id="grpTitle">So sánh nhóm</h3><span class="fine">Xếp theo điểm hòa hợp. Bấm "Xem chi tiết" để mở phân tích đầy đủ của cặp đó bên dưới.</span></div>
+  <div class="panel"><div class="boardTools" style="padding:0 0 12px;border:0"><h3 id="grpTitle">So sánh nhóm</h3><span class="fine">Xếp theo điểm hòa hợp. Chạm vào tên bất kỳ ai trong bảng (hoặc tên dưới biểu đồ) để xem phân tích chi tiết giữa người đó và người so sánh chính, ngay bên dưới.</span></div>
     <div class="grpwrap"><div id="grpBody" style="min-width:0"></div><div class="radar"><svg id="grpRadar" viewBox="0 0 420 370" role="img" aria-label="Lục giác chồng của cả nhóm"></svg><div class="legend" id="grpLegend"></div></div></div></div>
   <div id="synWarn" class="banner hidden"></div>
   <div class="metrics" id="synMetrics"></div>
