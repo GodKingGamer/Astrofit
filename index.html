@@ -150,6 +150,7 @@ td.num{font-family:var(--f-mono);white-space:nowrap;font-variant-numeric:tabular
 .field{display:flex;flex-direction:column;gap:5px;min-width:0}
 .field.wide{grid-column:1/-1}
 .field label{font-size:.78rem;font-weight:600;color:var(--muted)}
+.datebox{position:relative;display:flex;gap:6px;align-items:center}.datebox input[type=text]{flex:1}.calbtn{font:inherit;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:9px;padding:6px 10px;cursor:pointer;line-height:1.2}.datehid{position:absolute;right:0;bottom:0;width:1px!important;height:1px;opacity:0;padding:0!important;border:0!important;pointer-events:none}
 .field input,.field select{font:inherit;font-size:.9rem;width:100%;border:1px solid var(--line);border-radius:9px;background:var(--soft);color:var(--ink);padding:8px 10px}
 .field input:focus-visible,.field select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .check{display:flex;gap:8px;align-items:center;font-size:.86rem}
@@ -1072,6 +1073,8 @@ const TRAD=["Mars","Venus","Mercury","Moon","Sun","Mercury","Venus","Mars","Jupi
 function dignity(k,s){if(DOMI[k]&&DOMI[k].includes(s))return{lab:"đang ở vị trí mạnh nhất",v:2};if(EXAL[k]===s)return{lab:"phát huy rất tốt",v:1.6};if(DOMI[k]&&DOMI[k].some(x=>(x+6)%12===s))return{lab:"khó phát huy",v:-1.5};if(EXAL[k]!=null&&(EXAL[k]+6)%12===s)return{lab:"hơi lệch, cần cố gắng hơn",v:-1.4};return{lab:"",v:0}}
 
 // ---------- chart building ----------
+const isoVN=v=>{const m=String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+"/"+m[2]+"/"+m[1]:""};
+const vnISO=v=>{const m=String(v||"").trim().match(/^(\d{1,2})[\/.\-\s](\d{1,2})[\/.\-\s](\d{4})$/);if(!m)return null;const d=+m[1],mo=+m[2],y=+m[3];const dt=new Date(Date.UTC(y,mo-1,d));if(dt.getUTCFullYear()!==y||dt.getUTCMonth()!==mo-1||dt.getUTCDate()!==d)return null;return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0")};
 const TODAY=(()=>{const d=new Date(),z=x=>String(x).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())})();
 const dateNote=v=>{if(!v)return"";if(v>TODAY)return"Ngày sinh đang ở tương lai, bạn kiểm tra lại năm sinh nhé.";const [y,m]=v.split("-").map(Number),[ty,tm]=TODAY.split("-").map(Number);const mo=(ty-y)*12+(tm-m);return mo<36?("Người này mới "+(mo<12?Math.max(mo,0)+" tháng":Math.floor(mo/12)+" tuổi")+". Nếu nhập nhầm năm sinh, bạn sửa lại nhé."):""};
 function build(p){
@@ -1602,7 +1605,7 @@ function renderTransits(){const ch=CHM[state.trView];if(!ch){$("trSub").textCont
     return `<div class="titem ${kk==="hard"?"hard":kk==="conj"?"conj":""}"><span><b>${E(TRN[x.p])} ${x.ang===0?"đi qua":kind(x.ang)==="soft"?"nâng đỡ":"thử thách"} ${E(nml(x.k))}</b></span><span class="w">${fd(x.from)} – ${fd(x.to)}</span><span class="m">${E((TR[x.p][kk]||"")+" "+NATPT[x.k])}.${E(ret)} Chính xác nhất khoảng ${fd(x.exact)}.</span></div>`}).join("")}
 function renderForms(){const f=(p,idx)=>{const k=p.id,isC=k===state.center;return `<div class="panel" data-card="${k}"><div class="formhead"><h3>Người ${idx+1}${isC?' <span class="pill">người so sánh chính</span>':""}</h3><div class="btns">${isC?"":`<button type="button" class="btn" data-center="${k}">Đặt làm người chính</button>`}${state.people.length>2?`<button type="button" class="btn" data-del="${k}">Xóa</button>`:""}</div></div><div class="fields">
   <div class="field wide"><label for="name-${k}">Họ và tên</label><input id="name-${k}" data-k="${k}" data-f="name" type="text" maxlength="80" value="${E(p.name)}"></div>
-  <div class="field"><label for="date-${k}">Ngày sinh</label><input id="date-${k}" data-k="${k}" data-f="date" type="date" min="1900-01-01" max="${TODAY}" value="${E(p.date)}"><div class="fine" id="dw-${k}" style="color:var(--b);margin-top:4px"${dateNote(p.date)?"":" hidden"}>${E(dateNote(p.date))}</div></div>
+  <div class="field"><label for="datev-${k}">Ngày sinh (ngày/tháng/năm)</label><div class="datebox"><input id="datev-${k}" data-k="${k}" data-f="dateVN" type="text" inputmode="numeric" autocomplete="off" placeholder="dd/mm/yyyy" maxlength="10" value="${E(isoVN(p.date))}"><button type="button" class="calbtn" data-cal="${k}" aria-label="Chọn ngày trên lịch">📅</button><input id="date-${k}" class="datehid" data-k="${k}" data-f="date" type="date" min="1900-01-01" max="${TODAY}" value="${E(p.date)}" tabindex="-1" aria-hidden="true"></div><div class="fine" id="dw-${k}" style="color:var(--b);margin-top:4px"${dateNote(p.date)?"":" hidden"}>${E(dateNote(p.date))}</div></div>
   <div class="field"><label for="time-${k}">Giờ sinh (24h)</label><input id="time-${k}" data-k="${k}" data-f="time" type="time" value="${E(p.time)}" ${p.unknown?"disabled":""}></div>
   <div class="field wide"><label class="check"><input id="unk-${k}" data-k="${k}" data-f="unknown" type="checkbox" ${p.unknown?"checked":""}> Không rõ giờ sinh</label></div>
   <div class="field ${p.unknown?"":"hidden"}" data-simf="${k}"><label for="win-${k}">Khoảng giờ có thể sinh</label><select id="win-${k}" data-k="${k}" data-f="simWin">${Object.entries(SIMWIN).map(([w,v])=>`<option value="${w}" ${(p.simWin||"all")===w?"selected":""}>${E(v[0])}</option>`).join("")}</select></div>
@@ -1640,10 +1643,16 @@ function init(){
     else if(t.dataset.synf){state.synF=t.dataset.synf;renderSyn()}
     else if(t.dataset.person){if(t.closest("#van-han")){state.trView=t.dataset.person;personSeg();renderTransits()}else{state.view=t.dataset.person;state.natSel="Sun";personSeg();renderNatal()}}});
   $("forms").addEventListener("change",e=>{const t=e.target,k=t.dataset.k,f=t.dataset.f;if(!k)return;const p=byId(k);if(!p)return;
+    if(f==="dateVN"){const w=document.getElementById("dw-"+k);if(!t.value.trim()){p.date="";$("date-"+k).value="";if(w){w.textContent="";w.hidden=true}save();renderAll();return}
+      const iso=vnISO(t.value);if(!iso){if(w){w.textContent="Ngày chưa đúng. Bạn nhập theo dạng ngày/tháng/năm, ví dụ 08/08/2002.";w.hidden=false}return}
+      p.date=iso;$("date-"+k).value=iso;t.value=isoVN(iso);if(w){const m=dateNote(iso);w.textContent=m;w.hidden=!m}save();renderAll();return}
+    if(f==="date"){const v=$("datev-"+k);if(v)v.value=isoVN(t.value)}
     if(f==="unknown"){p.unknown=t.checked;$("time-"+k).disabled=t.checked;document.querySelectorAll(`[data-simf="${k}"]`).forEach(x=>x.classList.toggle("hidden",!t.checked));document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",!(t.checked&&p.simWin==="custom")))}
     else if(f==="simWin"){p.simWin=t.value;document.querySelectorAll(`[data-simc="${k}"]`).forEach(x=>x.classList.toggle("hidden",t.value!=="custom"))}else if(f==="tz")p.tz=Number(t.value);else p[f]=t.value;if(f==="date"){const w=document.getElementById("dw-"+k);if(w){const m=dateNote(t.value);w.textContent=m;w.hidden=!m}}
     if(f==="city"){const show=t.value==="other";$("lat-"+k).closest(".field").classList.toggle("hidden",!show);$("lon-"+k).closest(".field").classList.toggle("hidden",!show)}
     save();renderAll()});
+  $("forms").addEventListener("input",e=>{const t=e.target;if(t.dataset.f!=="dateVN"||(e.inputType||"").startsWith("delete"))return;let v=t.value.replace(/[^\d\/]/g,""),o;if(!v.includes("/")){const dg=v.slice(0,8);o=dg.slice(0,2)+(dg.length>2?"/"+dg.slice(2,4):"")+(dg.length>4?"/"+dg.slice(4):"");if(dg.length===2||dg.length===4)o+="/"}else{o=v;if(/^\d{2}\/\d{2}$/.test(o))o+="/"}o=o.replace(/\/{2,}/g,"/").slice(0,10);if(o!==t.value)t.value=o});
+  $("forms").addEventListener("click",e=>{const b=e.target.closest("[data-cal]");if(!b)return;const h=$("date-"+b.dataset.cal);try{if(h.showPicker)h.showPicker();else h.click()}catch(err){h.click()}});
   $("btnReset").addEventListener("click",()=>{state.people=JSON.parse(JSON.stringify(BLANK.people));state.center=BLANK.center;state.pairA=BLANK.pairA;state.view="p1";state.trView="p1";try{localStorage.removeItem("astrofit-v1");localStorage.removeItem("astrofit-v2")}catch(e){}renderForms();renderAll()});
   $("aiParse").addEventListener("click",runAi);
   $("aiExample").addEventListener("click",()=>{$("aiText").value=AI_EXAMPLE;$("aiText").focus()});
@@ -1657,7 +1666,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 window.__AF={simPair,simSamples,natSimSummary,parseLocal,findPlace,applyAi:()=>applyAi(),setAiRes:r=>{AI_RES=r},state,CH:()=>CH,CHM:()=>CHM,GROUP:()=>GROUP,SY:()=>SY,synastry,build};
 })();
 </script>
-<div id="pwaBar" style="text-align:center;font-size:12px;opacity:.65;padding:18px 0 4px">AstroFit Studio · Bản 18 · 02/11/2026<button id="pwaInstall" hidden style="margin-left:10px;font:inherit;padding:4px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer">Cài app</button></div>
+<div id="pwaBar" style="text-align:center;font-size:12px;opacity:.65;padding:18px 0 4px">AstroFit Studio · Bản 19 · 02/11/2026<button id="pwaInstall" hidden style="margin-left:10px;font:inherit;padding:4px 12px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer">Cài app</button></div>
 <div id="pwaToast" hidden style="position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1A1C3A;color:#ECEAF7;border:1px solid #33365C;border-radius:12px;padding:10px 14px;font-size:13px;z-index:99;box-shadow:0 6px 24px rgba(0,0,0,.3)">Đã có bản mới. <button id="pwaReload" style="font:inherit;margin-left:6px;padding:3px 10px;border-radius:8px;border:0;background:#E0B867;color:#11122A;cursor:pointer">Tải lại</button></div>
 <script>(function(){if(!("serviceWorker" in navigator))return;let dp=null;const b=document.getElementById("pwaInstall");
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;b.hidden=false});b.onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;b.hidden=true};
