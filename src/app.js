@@ -419,7 +419,7 @@ function applyAi(){if(!AI_RES)return;const R=AI_RES;const list=R.people.slice(0,
 const SIMWIN={all:["Cả ngày",0,1440],sang:["Sáng (5h–11h)",300,660],trua:["Trưa (11h–13h)",660,780],chieu:["Chiều (13h–18h)",780,1080],toi:["Tối (18h–23h)",1080,1380],dem:["Đêm (23h–5h)",1380,1740],custom:["Tự chọn khoảng giờ",null,null]};
 const hm=min=>{const m=((Math.round(min)%1440)+1440)%1440;return p2(Math.floor(m/60))+":"+p2(m%60)};
 const toMin=s=>{const m=String(s||"").match(/^(\d{1,2}):(\d{2})$/);return m?(+m[1])*60+(+m[2]):null};
-const SIMC=new Map();
+const SIMC=new Map(),SIM_ASC_N=24;
 function simWindow(p){const w=SIMWIN[p.simWin]?p.simWin:"all";if(w==="custom"){let a=toMin(p.simFrom),b=toMin(p.simTo);if(a==null||b==null)return[0,1440,"Cả ngày (khoảng tự chọn chưa hợp lệ)"];if(b<=a)b+=1440;return[a,b,"Từ "+hm(a)+" đến "+hm(b)]}return[SIMWIN[w][1],SIMWIN[w][2],SIMWIN[w][0]]}
 function simSamples(p){if(!p||!p.unknown||!p.date)return null;const [a,b,label]=simWindow(p);const asc=p.ascKnown===""||p.ascKnown==null?-1:+p.ascKnown;
   const key=[p.date,p.city,p.lat,p.lon,p.tz,a,b,asc].join("|");if(SIMC.has(key))return SIMC.get(key);
@@ -427,10 +427,11 @@ function simSamples(p){if(!p||!p.unknown||!p.date)return null;const [a,b,label]=
   for(let t=a+step/2;t<b;t+=step){const c=build({...p,unknown:false,time:hm(t)});if(c&&c.H)all.push({t,c})}
   let keep=all;
   if(asc>=0){// known rising sign: re-sample densely inside the matching time span so the range is not built from only ~3 points
-    const hit=all.filter(x=>x.c.pts.ASC.s===asc).map(x=>x.t);let lo,hi;
-    if(hit.length){lo=Math.max(a,Math.min(...hit)-step);hi=Math.min(b,Math.max(...hit)+step)}else{lo=a;hi=b}
-    const fs=Math.max(4,Math.ceil((hi-lo)/24));keep=[];
-    for(let t=lo+fs/2;t<hi;t+=fs){const c=build({...p,unknown:false,time:hm(t)});if(c&&c.H&&c.pts.ASC.s===asc)keep.push({t,c})}}
+    // spans where that sign is rising (it can appear twice in one day: just after midnight and late evening)
+    const segs=[];all.forEach((x,i)=>{if(x.c.pts.ASC.s!==asc)return;const g=segs[segs.length-1];if(g&&g.last===i-1){g.t1=x.t;g.last=i}else segs.push({t0:x.t,t1:x.t,last:i})});
+    const R=segs.length?segs.map(g=>[Math.max(a,g.t0-step),Math.min(b,g.t1+step)]):[[a,b]];
+    const L=R.reduce((s,r)=>s+r[1]-r[0],0),fs=Math.max(3,L/SIM_ASC_N);keep=[];
+    for(const [lo,hi] of R)for(let t=lo+fs/2;t<hi;t+=fs){const c=build({...p,unknown:false,time:hm(t)});if(c&&c.H&&c.pts.ASC.s===asc)keep.push({t,c})}}
   const res={label,step,from:a,to:b,asc,all,keep};SIMC.set(key,res);return res}
 const quant=(arr,q)=>{const s=[...arr].sort((x,y)=>x-y);if(!s.length)return null;const i=(s.length-1)*q,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)};
 const thin=(arr,n)=>arr.length<=n?arr:Array.from({length:n},(_,i)=>arr[Math.floor((i+.5)*arr.length/n)]);
