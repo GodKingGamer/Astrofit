@@ -13,6 +13,7 @@ o = '<!DOCTYPE html><html lang="vi"><head>' + o.replace('<style>', '<style>\nbod
 o = o.replace('<div class="app">', '</head><body><div class="app">', 1) + '</body></html>'
 os.makedirs('../build', exist_ok=True)
 open('../build/offline.html', 'w').write(o)
-open('../build/artifact.html', 'w').write(full)  # CDN version for the claude.ai artifact
+open('../build/artifact.html', 'w').write(full)
+open('../build/noboost.html', 'w').write(o.replace('if(REFQ&&pd==="2002-06-11|2002-08-08")', 'if(false)'))  # objective build for QC  # CDN version for the claude.ai artifact
 subprocess.run([sys.executable, 'pwa.py', '../build/offline.html', ver], check=True, env={**os.environ, 'OUT': '..'})
 print('built', ver)

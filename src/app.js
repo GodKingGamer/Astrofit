@@ -425,7 +425,13 @@ function simSamples(p){if(!p||!p.unknown||!p.date)return null;const [a,b,label]=
   const key=[p.date,p.city,p.lat,p.lon,p.tz,a,b,asc].join("|");if(SIMC.has(key))return SIMC.get(key);
   const span=b-a,step=Math.max(10,Math.ceil(span/36/5)*5);const all=[];
   for(let t=a+step/2;t<b;t+=step){const c=build({...p,unknown:false,time:hm(t)});if(c&&c.H)all.push({t,c})}
-  const keep=asc>=0?all.filter(x=>x.c.pts.ASC.s===asc):all;const res={label,step,from:a,to:b,asc,all,keep};SIMC.set(key,res);return res}
+  let keep=all;
+  if(asc>=0){// known rising sign: re-sample densely inside the matching time span so the range is not built from only ~3 points
+    const hit=all.filter(x=>x.c.pts.ASC.s===asc).map(x=>x.t);let lo,hi;
+    if(hit.length){lo=Math.max(a,Math.min(...hit)-step);hi=Math.min(b,Math.max(...hit)+step)}else{lo=a;hi=b}
+    const fs=Math.max(4,Math.ceil((hi-lo)/24));keep=[];
+    for(let t=lo+fs/2;t<hi;t+=fs){const c=build({...p,unknown:false,time:hm(t)});if(c&&c.H&&c.pts.ASC.s===asc)keep.push({t,c})}}
+  const res={label,step,from:a,to:b,asc,all,keep};SIMC.set(key,res);return res}
 const quant=(arr,q)=>{const s=[...arr].sort((x,y)=>x-y);if(!s.length)return null;const i=(s.length-1)*q,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)};
 const thin=(arr,n)=>arr.length<=n?arr:Array.from({length:n},(_,i)=>arr[Math.floor((i+.5)*arr.length/n)]);
 function simPair(A,B){const sa=A.p.unknown?simSamples(A.p):null,sb=B.p.unknown?simSamples(B.p):null;if(!sa&&!sb)return null;
